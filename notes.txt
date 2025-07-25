@@ -1,0 +1,55 @@
+step one-create a feature file
+step two-define the steps
+step tree-create a runner class
+step4-create backgrounds
+step5-create Hooks/pre-post conditions
+
+Background: Background keyword is used to define steps which are common to all the
+tests in the feature file.
+
+flow of execution after implementing hooks and background:
+hooks->backgrounds->scenarios
+
+data driven testing-when one test case executes against multiple sets of data
+hooks, background and scenario will be executed based on total sets  of data
+we implement scenario outline with examples table
+
+Framework/structure
+
+main-developers using it
+test-QA automation engineers use to write the code through which we test
+
+java-to write all java classes
+resources-to write all non java stuff such as feature file, excel, config files etc
+
+to keep all the feature files at one place:
+under resources directory will create the feature directory
+under feature directory write all the feature files
+
+under Java folder,  we need to create Steps package to keep all the step definitions at one place
+
+utility package -add all methods and webdriver to b used
+config reader class to read all the properties from config.prop file
+
+page object model (POM) design pattern-we create page classes as per the screen in the application
+
+Maven is a Build management Tool
+to run us this i need to add one plugin called: maven surefire plugin and maven cucumber reporting/https://github.com/damianszczepanik/maven-cucumber-reporting
+run tests for generate reports after place the plugins into POM.xml click on Maven at the right side of the screen/Lifecycle/test twice
+open this generated file click on target folder/cucumber-html-reports/<>overview-feature.html/right click/Open In/Browser/Chrome
+it makes our project into single build
+
+
+we use scenarios class in cucumber because it holds the complete information about which TC is passed or failed
+Maven Lifecycle is a sequence of task
+
+
+
+
+
+
+
+
+
+
+
