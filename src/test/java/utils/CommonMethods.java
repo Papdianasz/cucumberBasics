@@ -3,6 +3,7 @@ package utils;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
@@ -16,102 +17,113 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 
-public class CommonMethods extends PageInitializer {
+public class CommonMethods extends PageInitialiser {
 
     public static WebDriver driver;
 
     public void openBrowserAndLaunchApplication() {
 
-        switch (ConfigReaders.read("browser").toLowerCase()) {
-            case "chrome":
-                //ChromeOptions options = new ChromeOptions();
-                //options.addArguments("--headless");
-                driver = new ChromeDriver();
+        switch (ConfigReader.read("browser")){
+
+            case "Chrome":
+                ChromeOptions options = new ChromeOptions();
+               options.setHeadless(true);
+                driver=new ChromeDriver(options);
+
                 break;
-            case "firefox":
-                driver = new FirefoxDriver();
+            case "FireFox":
+                driver=new FirefoxDriver();
                 break;
-            case "edge":
+            case "Edge":
                 driver = new EdgeDriver();
                 break;
-            case "safari":
+            case "Safari":
                 driver = new SafariDriver();
                 break;
             default:
                 throw new RuntimeException("Invalid Browser Name");
         }
-
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
-        driver.get(ConfigReaders.read("url"));
-        initializePageObjects();
+        driver.get(ConfigReader.read("url"));
+        //this ,method will call all the objects
+       initializePageObjects();
+
     }
 
     public void closeBrowser() {
-        if (driver != null) {
+        if(driver!= null) {
             driver.quit();
         }
     }
 
-    public void sendText(String text, WebElement element) {
+    public void sendText(String text, WebElement element){
         element.clear();
         element.sendKeys(text);
     }
 
-    public void selectFromDropdown(WebElement dropDown, String visibleText) {
-        Select sel = new Select(dropDown);
+    public void selectFromDropDown(WebElement dropDown, String visibleText){
+        Select sel =new Select(dropDown);
         sel.selectByVisibleText(visibleText);
     }
-
-    public void selectFromDropdown(String value, WebElement dropDown) {
-        Select sel = new Select(dropDown);
+    public void selectFromDropDown(String value, WebElement dropDown ){
+        Select sel =new Select(dropDown);
         sel.selectByValue(value);
     }
-
-    public void selectFromDropDown(WebElement dropDown, int index) {
-        Select sel = new Select(dropDown);
+    public void selectFromDropDown( WebElement dropDown,int index ){
+        Select sel =new Select(dropDown);
         sel.selectByIndex(index);
     }
 
-    public WebDriverWait getWait() {
-        return new WebDriverWait(driver, Duration.ofSeconds(Constants.EXPLICIT_WAIT));
+    public WebDriverWait getwait(){
+        WebDriverWait wait= new WebDriverWait(driver, Duration.ofSeconds(Constants.EXPLICIT_WAIT));
+        return  wait;
     }
 
-    public void waitForElementToBeClickable(WebElement element) {
-        getWait().until(ExpectedConditions.elementToBeClickable(element));
+    public void waitForElementToBeClickAble(WebElement element){
+        getwait().until(ExpectedConditions.elementToBeClickable(element));
     }
 
-    public void click(WebElement element) {
-        waitForElementToBeClickable(element);
+    public void click(WebElement element){
+        waitForElementToBeClickAble(element);
         element.click();
     }
 
-    public JavascriptExecutor getJSExecutor() {
-        return (JavascriptExecutor) driver;
+    public JavascriptExecutor getJSExecutor(){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        return js;
     }
 
-    public void jsClick(WebElement element) {
+    public void jsClick(WebElement element){
         getJSExecutor().executeScript("arguments[0].click();", element);
     }
 
-    public byte[] takeScreenshot(String fileName) {
+
+    public byte[] takeScreenshot(String fileName){
+        //it accepts array of byte in cucumber for the screenshot
         TakesScreenshot ts = (TakesScreenshot) driver;
         byte[] picByte = ts.getScreenshotAs(OutputType.BYTES);
-        File source = ts.getScreenshotAs(OutputType.FILE);
+        File sourceFile = ts.getScreenshotAs(OutputType.FILE);
 
         try {
-            String filePath = Constants.SCREENSHOT_FILEPATH + fileName + " " + getTimeStamp("yyyy-MM-dd-HH-mm-ss") + ".png";
-            FileUtils.copyFile(source, new File(filePath));
+            FileUtils.copyFile(sourceFile,
+                    new File(Constants.SCREENSHOT_FILEPATH +
+                            fileName+" "+
+                            getTimeStamp("yyyy-MM-dd-HH-mm-ss")+".png"));
         } catch (IOException e) {
-            System.err.println("Screenshot saving failed: " + e.getMessage());
+            e.printStackTrace();
         }
         return picByte;
     }
 
-    public String getTimeStamp(String pattern) {
+    public String getTimeStamp(String pattern){
+        //this method will return the timestamp which we will add in ss method
         Date date = new Date();
+
+        //yyyy-mm-dd-hh-mm-ss
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         return sdf.format(date);
     }
 
-    }
+
+}

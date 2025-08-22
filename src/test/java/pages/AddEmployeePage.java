@@ -7,28 +7,26 @@ import utils.CommonMethods;
 
 public class AddEmployeePage extends CommonMethods {
 
-    @FindBy(id = "firstName")
-    public WebElement firstName;
 
-    @FindBy(id = "middleName")
-    public WebElement middleName;
+    @FindBy(id="firstName")
+    public WebElement firstNameLoc;
 
-    @FindBy(id = "lastName")
-    public WebElement lastName;
+    @FindBy(id="middleName")
+    public WebElement middleNameLoc;
 
-    @FindBy(id = "menu_pim_viewPimModule")
-    public WebElement menu_pim_viewPimModule;
+    @FindBy(id="lastName")
+    public WebElement lastNameLoc;
 
-    @FindBy(id = "menu_pim_addEmployee")
-    public WebElement menu_pim_addEmployee;
-
-    @FindBy(xpath = "//input[@value='Save']")
+    @FindBy(id="btnSave")
     public WebElement saveButton;
 
+    @FindBy(xpath = "//input[@id='employeeId']")
+    public  WebElement empId;
+
+
+
     public AddEmployeePage(){
-        PageFactory.initElements(driver, this);
+        PageFactory.initElements(driver,this);
     }
-
-
 
 }
